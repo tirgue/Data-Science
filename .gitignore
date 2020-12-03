@@ -1,0 +1,6 @@
+
+*.pyc
+*.csv
+.datascience_env/*
+data/*
+.vscode/*
