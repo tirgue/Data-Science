@@ -2,12 +2,12 @@
  
 ## Dependencies
 
-Linux :
+Linux :  
 `pip install readline`
-Windows
+Windows :  
 `pip install pyreadline`
 
 ## Usage
 
-`python3 main.py`
+`python3 main.py`  
 Use "help" command to use all build-in commands
