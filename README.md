@@ -3,7 +3,7 @@
 ## Dependencies
 
 Linux :  
-`pip install readline`
+`pip install readline`  
 Windows :  
 `pip install pyreadline`
 
