@@ -2,6 +2,7 @@
 *.pyc
 *.csv
 *.7z
+*.json
 .datascience_env/*
 data/*
 .vscode/*
