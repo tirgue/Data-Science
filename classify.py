@@ -1,4 +1,13 @@
 import csv, json, sys, datetime
+from script_clearDatas import extract_mails
+
+def createDate(data):
+    year = int(data.get('Date')[0:4])
+    month = int(data.get('Date')[5:7])
+    day = int(data.get('Date')[8:10])
+    hour = int(data.get('Date')[11:13])
+    minute = int(data.get('Date')[14:16])
+    return datetime.datetime(year, month, day, hour, minute)
 
 def retrieve_sending_month(date):
     return date.strftime("%b")
@@ -31,13 +40,38 @@ def retrieve_long_subject(data):
     return "yes" if len(data.get('Subject')) > 46 else "no"
 
 def retrieve_content_size(data):
-    return "medium"
+    if len(data.get('content')) < 150:
+        return "small"
+    elif len(data.get('content')) > 300:
+        return "high" 
+    else:
+        return "medium"
 
 def retrieve_formal(data):
     return "yes"
 
-def retrieve_time_until_answer(data):
-    return 3
+def retrieve_time_until_answer(data, datas):
+    subject = data.get("Subject")
+    if subject.startswith("Re:"):
+        sender = extract_mails(data.get('From'))
+        d_subject = data.get("Subject")[4:]
+        for d in datas:
+            if d.get("Subject")  == d_subject:
+                receivers = extract_mails(d.get("To"))
+                if sender[0] in receivers:
+                    break
+
+        respondingDate = createDate(data)
+        sendingDate = createDate(d)
+
+        delta = respondingDate - sendingDate
+        if delta < datetime.timedelta():
+            return -1
+
+        return str(delta)
+
+    else:
+        return "None"
 
 if __name__ == "__main__":
     maxInt = sys.maxsize
@@ -48,38 +82,38 @@ if __name__ == "__main__":
         except OverflowError:
             maxInt = int(maxInt/10)
 
+    print("Loading...")
+
     filename = "data_response.csv"
     datas = csv.DictReader(open(filename, "r"))
+    datas = list(datas)
 
     emails = []
 
     print("Computing...")
     for data in datas:
-        year = int(data.get('Date')[0:4])
-        month = int(data.get('Date')[5:7])
-        day = int(data.get('Date')[8:10])
-        hour = int(data.get('Date')[11:13])
-        minute = int(data.get('Date')[14:16])
-        sendingDate = datetime.datetime(year, month, day, hour, minute)
+        sendingDate = createDate(data)
 
-        sending_month = retrieve_sending_month(sendingDate)
-        sending_day = retrieve_sending_day(sendingDate)
-        sending_time = retrieve_sending_time(sendingDate)
-        long_subject = retrieve_long_subject(data)
-        content_size = retrieve_content_size(data)
-        formal = retrieve_formal(data)
-        time_until_answer = retrieve_time_until_answer(data)
+        time_until_answer = retrieve_time_until_answer(data, datas)
 
-        email = {
-            "sending_month" : sending_month,
-            "sending_day" : sending_day,
-            "sending_time" : sending_time,
-            "long_subject" : long_subject,
-            "content_size" : content_size,
-            "formal" : formal,
-            "time_until_answer" : time_until_answer,
-        }
-        emails.append(email)
+        if time_until_answer != -1:
+            sending_month = retrieve_sending_month(sendingDate)
+            sending_day = retrieve_sending_day(sendingDate)
+            sending_time = retrieve_sending_time(sendingDate)
+            long_subject = retrieve_long_subject(data)
+            content_size = retrieve_content_size(data)
+            formal = retrieve_formal(data)
+
+            email = {
+                "sending_month" : sending_month,
+                "sending_day" : sending_day,
+                "sending_time" : sending_time,
+                "long_subject" : long_subject,
+                "content_size" : content_size,
+                "formal" : formal,
+                "time_until_answer" : time_until_answer,
+            }
+            emails.append(email)
 
     output = {
         "emails" : emails
