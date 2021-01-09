@@ -88,11 +88,15 @@ if __name__ == "__main__":
         except OverflowError:
             maxInt = int(maxInt/10)
 
-    print("Loading...")
-
-    filename = "data_response.csv"
-    datas = csv.DictReader(open(filename, "r"))
-    datas = list(datas)
+    try:
+        filename = sys.argv[1]
+        with open(filename, "r") as file:
+            print("Loading...")
+            datas = csv.DictReader(file)    
+            datas = list(datas)
+    except :
+        print("*** Invalid filename ***\nUsage : python classify.py FILENAME")
+        exit(-1)
 
     emails = []
 

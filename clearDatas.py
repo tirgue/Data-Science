@@ -21,8 +21,6 @@ def filterData(data):
     return d
 
 if __name__ == "__main__":
-    print("Loading...")
-
     maxInt = sys.maxsize
     while True:
         try:
@@ -31,9 +29,15 @@ if __name__ == "__main__":
         except OverflowError:
             maxInt = int(maxInt/10)
 
-    filename = "data.csv"
-    datas = csv.DictReader(open(filename))
-    datas = list(datas)
+    try:
+        filename = sys.argv[1]
+        with open(filename, "r") as file:
+            print("Loading...")
+            datas = csv.DictReader(file)    
+            datas = list(datas)
+    except :
+        print("*** Invalid filename ***\nUsage : python script_clearDatas.py FILENAME")
+        exit(-1)
 
     csv_columns = []
 
