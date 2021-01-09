@@ -48,7 +48,13 @@ def retrieve_content_size(data):
         return "medium"
 
 def retrieve_formal(data):
-    return "yes"
+    with open("formules.txt", "r") as file:
+        content = data.get('content').lower()
+        for formule in file:
+            if formule in content:
+                return "yes"
+
+    return "no"
 
 def retrieve_time_until_answer(data, datas):
     subject = data.get("Subject")
