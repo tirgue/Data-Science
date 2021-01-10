@@ -16,7 +16,7 @@ def retrieve_sending_day(date):
     return date.strftime("%a")
 
 def retrieve_sending_time(date):
-    if date.hour > 22:
+    if date.hour > 22 or date.hour == 0:
         return "bet-22-00"
     if date.hour > 20:
         return "bet-20-22"
@@ -32,7 +32,7 @@ def retrieve_sending_time(date):
         return "bet-05-08"
     if date.hour > 0:
         return "bet-00-05"  
-    
+
 def retrieve_long_subject(data):
     # Moyenne de lettres par mot : 4.65
     # On estime qu'un sujet est long au delà d'une dizaine de mots (10 * 4.65 = 46)
