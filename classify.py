@@ -16,22 +16,22 @@ def retrieve_sending_day(date):
     return date.strftime("%a")
 
 def retrieve_sending_time(date):
-    if date.hour > 0:
-        return "bet-00-05"
-    if date.hour > 5:
-        return "bet-05-08"
-    if date.hour > 8:
-        return "bet-08-11"
-    if date.hour > 11:
-        return "bet-11-14"
-    if date.hour > 14:
-        return "bet-14-18"
-    if date.hour > 18:
-        return "bet-18-20"
-    if date.hour > 20:
-        return "bet-20-22"
     if date.hour > 22:
         return "bet-22-00"
+    if date.hour > 20:
+        return "bet-20-22"
+    if date.hour > 18:
+        return "bet-18-20"
+    if date.hour > 14:
+        return "bet-14-18"
+    if date.hour > 11:
+        return "bet-11-14"
+    if date.hour > 8:
+        return "bet-08-11"
+    if date.hour > 5:
+        return "bet-05-08"
+    if date.hour > 0:
+        return "bet-00-05"  
     
 def retrieve_long_subject(data):
     # Moyenne de lettres par mot : 4.65
