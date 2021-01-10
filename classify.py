@@ -37,7 +37,7 @@ def retrieve_long_subject(data):
     # Moyenne de lettres par mot : 4.65
     # On estime qu'un sujet est long au delà d'une dizaine de mots (10 * 4.65 = 46)
     # Donc 46 caractères est la limite entre un sujet long et court
-    return "yes" if len(data.get('Subject')) > 46 else "no"
+    return "long" if len(data.get('Subject')) > 46 else "short"
 
 def retrieve_content_size(data):
     if len(data.get('content')) < 150:
