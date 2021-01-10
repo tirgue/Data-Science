@@ -74,7 +74,7 @@ def retrieve_time_until_answer(data, datas):
         if delta < datetime.timedelta():
             return -1
 
-        return str(delta)
+        return str(delta.total_seconds()/3600)
 
     else:
         return "None"
